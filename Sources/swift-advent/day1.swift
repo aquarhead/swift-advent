@@ -1,5 +1,5 @@
-public struct day1 {
-    public static func run() {
+internal struct day1 {
+    internal static func run() {
         let carry = day1.input.split(separator: "\n\n").map({$0.split(separator: "\n").map({Int($0)!}).reduce(0, {$0 + $1})})
 
         print(carry.max()!)
