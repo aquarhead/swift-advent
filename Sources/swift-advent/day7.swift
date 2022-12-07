@@ -4,7 +4,7 @@ import RegexBuilder
 internal struct day7 {
     enum Content {
         case subDir(String)
-        case file(Int, String)
+        case file(Int)
     }
     
     internal static func run() {
@@ -13,11 +13,7 @@ internal struct day7 {
         
         let cd_parser = Regex {
             "cd "
-            Capture {
-                OneOrMore {
-                    .any
-                }
-            }
+            Capture { OneOrMore(.any) }
         }
         
         let ls_parser = Regex {
@@ -40,12 +36,9 @@ internal struct day7 {
                 if m.1.hasPrefix("/") {
                     current_dir = String(m.1)
                 } else if m.1 == ".." {
-                    while current_dir.popLast() != "/" {
-                        //
-                    }
+                    while current_dir.popLast() != "/" {}
                 } else {
-                    current_dir += "/"
-                    current_dir += m.1
+                    current_dir += "/" + m.1
                 }
             } else {
                 contents[current_dir] = lines[1...].map({
@@ -54,7 +47,7 @@ internal struct day7 {
                        return Content.subDir(String(m!.2))
                     }
                     else {
-                       return Content.file(Int(m!.1)!, String(m!.2))
+                       return Content.file(Int(m!.1)!)
                     }
                 })
             }
@@ -64,7 +57,7 @@ internal struct day7 {
             sizes[key] = contents[key]?.reduce(0, { acc, c in
                 switch c {
                 case let .subDir(d): return acc + sizes[key + "/" + d]!
-                case let .file(s, _): return acc + s
+                case let .file(s): return acc + s
                 }
             })
         }
