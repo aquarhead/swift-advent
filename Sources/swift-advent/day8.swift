@@ -1,7 +1,6 @@
 import Foundation
 
 internal struct day8 {
-    
     private struct pos: Hashable {
         var x: Int
         var y: Int
