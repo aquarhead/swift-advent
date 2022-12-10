@@ -16,8 +16,5 @@ let package = Package(
             dependencies: [
                 .product(name: "Algorithms", package: "swift-algorithms"),
             ]),
-        .testTarget(
-            name: "swift-adventTests",
-            dependencies: ["swift-advent"]),
     ]
 )
