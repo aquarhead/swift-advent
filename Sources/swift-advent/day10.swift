@@ -1,5 +1,3 @@
-import Foundation
-
 fileprivate struct cpu {
     var x = 1
     var cycle = 1
@@ -39,7 +37,7 @@ internal struct day10 {
     internal static func run() {
         var x = cpu()
       
-        day10_input.input.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "\n").forEach { line in
+        inputs.day10.input.cleanup().split(separator: "\n").forEach { line in
             let s = line.split(separator: " ")
             if s.count > 1 {
                 x.addx(n: Int(s[1])!)
