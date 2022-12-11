@@ -42,7 +42,7 @@ fileprivate struct Monkey {
     
     var inspected = 0
     
-    mutating func turn() -> [Array.Index:[Int]] {
+    mutating func turn(_ lim: Int?) -> [Array.Index:[Int]] {
         var ret: [Array.Index:[Int]] = [test.1 : [], test.2 : []]
         
         inspected += items.count
@@ -58,36 +58,13 @@ fileprivate struct Monkey {
             case (.Mul, .Old):
                 return $0 * $0
             }
-        }).map({ $0 / 3 }).forEach({
-            if $0 % test.0 == 0 {
-                ret[test.1]!.append($0)
+        }).map({
+            if let x = lim {
+                return $0 % x
             } else {
-                ret[test.2]!.append($0)
+                return $0 / 3
             }
-        })
-        
-        items = []
-        
-        return ret
-    }
-        
-    mutating func turn2(_ lim: Int) -> [Array.Index:[Int]] {
-        var ret: [Array.Index:[Int]] = [test.1 : [], test.2 : []]
-        
-        inspected += items.count
-        
-        items.map({
-            switch op {
-            case (.Add, .Num(let n)):
-                return $0 + n
-            case (.Mul, .Num(let n)):
-                return $0 * n
-            case (.Add, .Old):
-                return $0 + $0
-            case (.Mul, .Old):
-                return $0 * $0
-            }
-        }).map({ $0 % lim }).forEach({
+            }).forEach({
             if $0 % test.0 == 0 {
                 ret[test.1]!.append($0)
             } else {
@@ -106,29 +83,24 @@ internal struct day11 {
         var monkeys = inputs.day11.mine.cleanup().split(separator: "\n\n").map({ Monkey(from: String($0)) })
         var monkeys2 = monkeys
         
+        let lim = monkeys2.reduce(1, { $0 * $1.test.0 })
         var round = 1
-        while round <= 20 {
+        while round <= 10000 {
             for idx in 0..<(monkeys.count) {
-                monkeys[idx].turn().forEach { (target, throwed) in
-                    monkeys[target].items += throwed
+                if round <= 20 {
+                    monkeys[idx].turn(nil).forEach { (target, throwed) in
+                        monkeys[target].items += throwed
+                    }
+                }
+                
+                monkeys2[idx].turn(lim).forEach { (target, throwed) in
+                    monkeys2[target].items += throwed
                 }
             }
             round += 1
         }
         
         print(monkeys.map({ $0.inspected }).max(count: 2).reduce(1, *))
-        
-        let lim = monkeys2.reduce(1, { $0 * $1.test.0 })
-        var round2 = 1
-        while round2 <= 10000 {
-            for idx in 0..<(monkeys2.count) {
-                monkeys2[idx].turn2(lim).forEach { (target, throwed) in
-                    monkeys2[target].items += throwed
-                }
-            }
-            round2 += 1
-        }
-        
         print(monkeys2.map({ $0.inspected }).max(count: 2).reduce(1, *))
     }
 }
