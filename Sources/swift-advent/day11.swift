@@ -84,8 +84,7 @@ internal struct day11 {
         var monkeys2 = monkeys
         
         let lim = monkeys2.reduce(1, { $0 * $1.test.0 })
-        var round = 1
-        while round <= 10000 {
+        for round in 1...10000 {
             for idx in 0..<(monkeys.count) {
                 if round <= 20 {
                     monkeys[idx].turn(nil).forEach { (target, throwed) in
@@ -97,7 +96,6 @@ internal struct day11 {
                     monkeys2[target].items += throwed
                 }
             }
-            round += 1
         }
         
         print(monkeys.map({ $0.inspected }).max(count: 2).reduce(1, *))
