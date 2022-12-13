@@ -34,11 +34,10 @@ struct day13 {
             return list
         }
         
-        print(inputs.day13.mine.cleanup().split(separator: "\n\n").map({ $0.split(separator: "\n") }).indexed().filter({ (_, pair) in
-            
-            var left = parse(Array(pair[0]))
-            var right = parse(Array(pair[1]))
-            
+        func in_order(_ a: [Entry], _ b: [Entry]) -> Bool {
+            var left = a
+            var right = b
+             
             var li = 0
             var ri = 0
             
@@ -72,6 +71,11 @@ struct day13 {
             }
             
             return true
+        }
+        
+        print(inputs.day13.mine.cleanup().split(separator: "\n\n").map({ $0.split(separator: "\n") }).indexed().filter({
+            in_order(parse(Array($1[0])),
+                     parse(Array($1[1])))
         }).map({ $0.0 + 1 }).reduce(0, +))
         
         var packets = inputs.day13.mine.cleanup().split(separator: "\n", omittingEmptySubsequences: true).map({ parse(Array($0)) })
@@ -81,43 +85,6 @@ struct day13 {
         packets.append(dp1)
         packets.append(dp2)
         
-        print(packets.sorted { a, b in
-            var left = a
-            var right = b
-            
-            var li = 0
-            var ri = 0
-            
-            while li < left.count {
-                switch (left[li], right[ri]) {
-                case (.In, .In),
-                    (.Out, .Out):
-                    li += 1
-                    ri += 1
-                case (.Num(let ln), .Num(let rn)):
-                    if ln < rn {
-                        return true
-                    }
-                    if ln > rn {
-                        return false
-                    }
-                    li += 1
-                    ri += 1
-                case (.In, .Out),
-                    (.Num(_), .Out):
-                    return false
-                case (.Out, _):
-                    return true
-                case (.Num(_), .In):
-                    left.insert(.Out, at: li+1)
-                    left.insert(.In, at: li)
-                case (.In, .Num(_)):
-                    right.insert(.Out, at: ri+1)
-                    right.insert(.In, at: ri)
-                }
-            }
-            
-            return true
-        }.indexed().filter({ $1 == dp1 || $1 == dp2}).map({ $0.0 + 1 }).reduce(1, *))
+        print(packets.sorted(by: { in_order($0, $1) }).indexed().filter({ $1 == dp1 || $1 == dp2}).map({ $0.0 + 1 }).reduce(1, *))
     }
 }
