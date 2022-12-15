@@ -2,6 +2,10 @@ extension String {
     func cleanup() -> String {
         self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
+    
+    func lines() -> [String] {
+        self.cleanup().split(separator: "\n").map({ String($0) })
+    }
 }
 
 struct Pos: Hashable {
@@ -20,6 +24,10 @@ struct Pos: Hashable {
             Pos(x, y - 1),
             Pos(x, y + 1),
         ]
+    }
+    
+    func md(_ other: Self) -> Int {
+        abs(x - other.x) + abs(y - other.y)
     }
 }
 
