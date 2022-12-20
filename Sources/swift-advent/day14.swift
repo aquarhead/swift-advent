@@ -31,8 +31,8 @@ struct day14 {
             }
         }
         
-        let minx = cave.map({ $0.x }).min()!
-        let maxx = cave.map({ $0.x }).max()!
+//        let minx = cave.map({ $0.x }).min()!
+//        let maxx = cave.map({ $0.x }).max()!
         
         // part 1
         
