@@ -1,6 +1,6 @@
 @main
 public struct swift_advent {
     public static func main() {
-        day21.run()
+        day23.run()
     }
 }

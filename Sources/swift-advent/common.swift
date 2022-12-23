@@ -26,6 +26,21 @@ struct Pos: Hashable {
         ]
     }
     
+    func around8() -> [Pos] {
+        [
+            Pos(x - 1, y),
+            Pos(x - 1, y + 1),
+            Pos(x - 1, y - 1),
+            
+            Pos(x, y - 1),
+            Pos(x, y + 1),
+            
+            Pos(x + 1, y),
+            Pos(x + 1, y - 1),
+            Pos(x + 1, y + 1),
+        ]
+    }
+    
     func md(_ other: Self) -> Int {
         abs(x - other.x) + abs(y - other.y)
     }
